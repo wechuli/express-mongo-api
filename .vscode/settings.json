@@ -1,0 +1,7 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/bd060f76-7dd3-425f-8e7f-8e488e33d7b5/resourceGroups/appsvc_rg_linux_centralus/providers/Microsoft.Web/sites/express-mongo-api",
+    "appService.deploySubpath": ""
+}
