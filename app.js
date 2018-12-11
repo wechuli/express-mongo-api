@@ -2,7 +2,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
+const userRoutes = require("./routes/users");
+const mongoose = require("mongoose");
+const dBdetails = require("./passwords.json");
 
+mongoose.Promise = global.Promise; //Tell mangoose to use the global promise object
 //start the express application
 const app = express();
 
@@ -10,15 +14,40 @@ const app = express();
 app.use(bodyParser.json()); //Use the body parser
 app.use(logger("dev")); //Use morgan to log requests
 
-app.use(express.static("public"));
+// app.use(express.static("public"));
+
+//Connect to Mongo Database
+
+const server = dBdetails.server;
+const database = dBdetails.database;
+const user = dBdetails.user;
+const password = dBdetails.password;
+
+//mongoose.connect(`mongodb://${user}:${password}@${server}:${dbport}/${database}`);
+// mongoose.connect(`mongodb://localhost/express-api`,{useNewUrlParser: true});
+
+const mongodbUri = `mongodb://@${server}/${database}`;
+mongoose.connect(
+  mongodbUri,
+  {
+    useNewUrlParser: true,
+    auth: {
+      user: user,
+      password: password
+    }
+  }
+);
+
+const conn = mongoose.connection;
+conn.on("error", console.error.bind(console, "connection error:"));
+
+conn.once("open", () => {
+  console.log("connected to database");
+});
 
 //Routes
 
-app.get("/", (req, res) => {
-  res.status(200).json({
-    message: "You requested the index page"
-  });
-});
+app.use("/users", userRoutes);
 
 // // Catch 404 errors
 // app.use((req, res) => {
