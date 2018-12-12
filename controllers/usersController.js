@@ -1,4 +1,5 @@
 const User = require("../models/Users.model");
+const Car = require("../models/Car.model");
 
 //get all users
 // exports.index = (req, res) => {
@@ -57,16 +58,49 @@ exports.replaceUser = async (req, res, next) => {
 
 //Edit a user
 exports.editUser = async (req, res, next) => {
-    try {
-      const { userId } = req.params;
-      const newUser = req.body;
-      const result = await User.findOneAndUpdate(userId, newUser);
-      res.status(200).json(result);
-    } catch (error) {
-      next(error);
-    }
-  };
-  
+  try {
+    const { userId } = req.params;
+    const newUser = req.body;
+    const result = await User.findOneAndUpdate(userId, newUser);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+//Get user cars
+exports.getUserCars = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId).populate("cars");
+    //console.log(`User cars: ${user.cars}`);
+    res.status(200).json(user.cars);
+  } catch (error) {
+    next(error);
+  }
+};
+
+//Add a new car
+exports.newUserCar = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const newCar = new Car(req.body);
+    // console.log(newCar);
+    //Get user
+    const user = await User.findById(userId);
+    newCar.seller = user;
+    //save the car
+    await newCar.save();
+    //Add car to the user's selling array car
+    user.cars.push(newCar);
+    //save the user
+    await user.save();
+    res.status(201).json(newCar);
+  } catch (error) {
+    next(error);
+  }
+};
+
 /*
 we can interact with mongoose in 3 different ways
 1.Callbacks

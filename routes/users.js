@@ -15,4 +15,9 @@ router
   .patch(userController.editUser)
   .delete();
 
+router
+  .route("/:userId/cars")
+  .get(userController.getUserCars)
+  .post(userController.newUserCar);
+
 module.exports = router;
