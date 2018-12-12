@@ -13,6 +13,7 @@ const Car = require("../models/Car.model");
 //   //   });
 // };
 
+//get a list of all users
 exports.index = async (req, res, next) => {
   try {
     const users = await User.find({});
@@ -36,7 +37,10 @@ exports.newUser = async (req, res, next) => {
 //Get a specific user
 exports.getUser = async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    // const valResults = Joi.validate(req.params, idSchema);
+    // console.log(valResults);
+    // const { userId } = req.params; //old way
+    const { userId } = req.value.params; 
     const user = await User.findById(userId);
     res.status(200).json(user);
   } catch (error) {
