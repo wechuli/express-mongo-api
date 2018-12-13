@@ -15,6 +15,7 @@ const Car = require("../models/Car.model");
 
 //get a list of all users
 exports.index = async (req, res, next) => {
+  //validation done
   try {
     const users = await User.find({});
     res.status(200).json(users);
@@ -25,8 +26,12 @@ exports.index = async (req, res, next) => {
 
 //Create a new user
 exports.newUser = async (req, res, next) => {
+  //validation done
   try {
-    const newUser = new User(req.body);
+    // console.log(`req.body: `, req.body);
+    // console.log(`req.value: `, req.value);
+    // console.log(`req.value.body:`, req.value.body);
+    const newUser = new User(req.value.body);
     const user = await newUser.save();
     res.status(201).json(user);
   } catch (error) {
@@ -36,11 +41,12 @@ exports.newUser = async (req, res, next) => {
 
 //Get a specific user
 exports.getUser = async (req, res, next) => {
+  //validation done
   try {
     // const valResults = Joi.validate(req.params, idSchema);
     // console.log(valResults);
     // const { userId } = req.params; //old way
-    const { userId } = req.value.params; 
+    const { userId } = req.value.params;
     const user = await User.findById(userId);
     res.status(200).json(user);
   } catch (error) {
@@ -50,9 +56,12 @@ exports.getUser = async (req, res, next) => {
 
 //replace user-using put
 exports.replaceUser = async (req, res, next) => {
+  //validation done
   try {
-    const { userId } = req.params;
-    const newUser = req.body;
+    // const { userId } = req.params;
+    // const newUser = req.body; //old way without validation
+    const { userId } = req.value.params;
+    const newUser = req.value.body;
     const result = await User.findOneAndUpdate(userId, newUser);
     res.status(200).json(result);
   } catch (error) {
@@ -62,9 +71,10 @@ exports.replaceUser = async (req, res, next) => {
 
 //Edit a user
 exports.editUser = async (req, res, next) => {
+  //validation done
   try {
-    const { userId } = req.params;
-    const newUser = req.body;
+    const { userId } = req.value.params;
+    const newUser = req.value.body;
     const result = await User.findOneAndUpdate(userId, newUser);
     res.status(200).json(result);
   } catch (error) {
@@ -74,8 +84,9 @@ exports.editUser = async (req, res, next) => {
 
 //Get user cars
 exports.getUserCars = async (req, res, next) => {
+  //validation done
   try {
-    const { userId } = req.params;
+    const { userId } = req.value.params;
     const user = await User.findById(userId).populate("cars");
     //console.log(`User cars: ${user.cars}`);
     res.status(200).json(user.cars);
@@ -86,9 +97,10 @@ exports.getUserCars = async (req, res, next) => {
 
 //Add a new car
 exports.newUserCar = async (req, res, next) => {
+  //validation done
   try {
-    const { userId } = req.params;
-    const newCar = new Car(req.body);
+    const { userId } = req.value.params;
+    const newCar = new Car(req.value.body);
     // console.log(newCar);
     //Get user
     const user = await User.findById(userId);
