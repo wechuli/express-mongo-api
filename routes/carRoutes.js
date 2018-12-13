@@ -10,6 +10,23 @@ const {
 router
   .route("/")
   .get(CarsController.index)
-  .post(validateBody(schemas.newCarSchema), CarsController.newCar);
+  .post(validateBody(schemas.carSchema), CarsController.newCar);
+
+router
+  .route("/:carId")
+  .get(validateParams(schemas.idSchema, "carId"), CarsController.getCar)
+  .put(
+    [
+      validateParams(schemas.idSchema, "carId"),
+      validateBody(schemas.usercarSchema)
+    ],
+    CarsController.replaceCar
+  )
+  .patch(
+    validateParams(schemas.idSchema, "carId"),
+    validateBody(schemas.patchCarSchema),
+    CarsController.updateCar
+  )
+  .delete(validateParams(schemas.idSchema, "carId"), CarsController.deleteCar);
 
 module.exports = router;
