@@ -2,7 +2,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
-const userRoutes = require("./routes/users");
+const userRoutes = require("./routes/usersRoutes");
+const carRoutes = require("./routes/carRoutes");
 const mongoose = require("mongoose");
 const dBdetails = require("./passwords.json");
 
@@ -12,6 +13,8 @@ const app = express();
 
 //Middleware functions
 app.use(bodyParser.json()); //Use the body parser
+app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(logger("dev")); //Use morgan to log requests
 
 // app.use(express.static("public"));
@@ -48,6 +51,7 @@ conn.once("open", () => {
 //Routes
 
 app.use("/users", userRoutes);
+app.use("/cars", carRoutes);
 
 // // Catch 404 errors
 // app.use((req, res) => {
