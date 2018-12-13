@@ -6,10 +6,14 @@ const userRoutes = require("./routes/usersRoutes");
 const carRoutes = require("./routes/carRoutes");
 const mongoose = require("mongoose");
 const dBdetails = require("./passwords.json");
+const helmet = require("helmet");
 
 mongoose.Promise = global.Promise; //Tell mangoose to use the global promise object
 //start the express application
 const app = express();
+
+//Adding helmet for security
+app.use(helmet());
 
 //Middleware functions
 app.use(bodyParser.json()); //Use the body parser

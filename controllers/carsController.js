@@ -51,6 +51,6 @@ module.exports = {
     //remove car from the User cars list
     seller.cars.pull(car);
     await seller.save();
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true }); 
   }
 };
